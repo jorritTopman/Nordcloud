@@ -56,12 +56,12 @@ variable "backend_pool_name" {
 variable "frontend_endpoint" {
       description = "frontend_endpoint name"
       type = string
-      default = "kaboem2022"
+      default = "fe1"
 }
 
 variable "frontend_endpoint_hostname" {
       description = "frontend_endpoint hostname"
       type = string
-      default = "jorritflopman.azurefd.net"
+      default = ".azurefd.net"
 }
 

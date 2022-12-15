@@ -1,20 +1,20 @@
 resource "azurerm_resource_group" "fg-rg" {
-  name     = "${var.company_name}${var.resoure_group_name}"
+  name     = "${var.company_name}-${var.resoure_group_name}"
   location = var.resoure_group_location
 }
 
 resource "azurerm_frontdoor" "b2cfrontdoor" {
-      name                 = "b2c-frontdoor-endpoint-dev"
+      name                 = "${var.company_name}-${var.frontend_endpoint}"
       resource_group_name  = azurerm_resource_group.fg-rg.name
     
       routing_rule {
         name               = "routingrule"
         accepted_protocols = ["Http", "Https"]
         patterns_to_match  = ["/*"]
-        frontend_endpoints = ["b2c-frontdoor-endpoint-dev"]
+        frontend_endpoints = ["${var.company_name}-${var.frontend_endpoint}"]
         forwarding_configuration {
           forwarding_protocol = "MatchRequest"
-          backend_pool_name   = "b2-backend-pool-dev"
+          backend_pool_name   = "${var.company_name}-${var.backend_pool_name}"
         }
       }
     
@@ -29,7 +29,7 @@ resource "azurerm_frontdoor" "b2cfrontdoor" {
       }
     
       backend_pool {
-        name = "b2-backend-pool-dev"
+        name = "${var.company_name}-${var.backend_pool_name}"
         backend {
           host_header = "xyz.b2clogin.com"
           address     = "xyz.b2clogin.com"
@@ -41,8 +41,8 @@ resource "azurerm_frontdoor" "b2cfrontdoor" {
       }
     
       frontend_endpoint {
-        name      = "b2c-frontdoor-endpoint-dev"
-        host_name = "b2c-frontdoor-endpoint-dev.azurefd.net"
+        name      = "${var.company_name}-${var.frontend_endpoint}"
+        host_name = "${var.company_name}-${var.frontend_endpoint}${var.frontend_endpoint_hostname}"
         session_affinity_enabled = false
         session_affinity_ttl_seconds = 0
       }
